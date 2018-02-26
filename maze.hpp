@@ -1,3 +1,8 @@
+/* Copyright (c) 2018, Pierre DEJOUE
+ *
+ * This software may be modified and distributed under the terms of the MIT license.
+ * See the LICENSE file for details.
+ */
 #ifndef _MAZE_HPP_
 #define _MAZE_HPP_
 
