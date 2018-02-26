@@ -6,6 +6,7 @@
 #ifndef _MAZEWALK_HPP_
 #define _MAZEWALK_HPP_
 
+#include <memory>
 #include <vector>
 
 #include "input.hpp"
@@ -24,9 +25,9 @@ public:
 private:
     std::vector<gridInput>& grids;
     unsigned int index;
-    mazeFull* currentMaze;
-    mazeForMouse* mazeformouse;
-    mouse* theMouse;
+    std::unique_ptr<mazeFull> currentMaze;
+    std::unique_ptr<mazeForMouse> mazeformouse;
+    std::unique_ptr<mouse> theMouse;
     coord previousPos;
     coord origin;           // Starting position in the maze
 

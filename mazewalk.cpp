@@ -25,7 +25,7 @@ coord randomEmptyLocation(const gridInput& grid) {
     return result;
 }
 
-mazewalk::mazewalk(vector<gridInput>& grids) : grids(grids), currentMaze(nullptr), mazeformouse(nullptr), theMouse(nullptr) {
+mazewalk::mazewalk(vector<gridInput>& grids) : grids(grids) {
     if (grids.empty()) { throw invalid_argument("Empty maze list!"); }
     index = 0;
     setupNextMaze(index);
@@ -62,11 +62,6 @@ mazeFull& mazewalk::nextMouseStep() {
 }
 
 void mazewalk::setupNextMaze(int index) {
-    // Free previous allocations
-    if (currentMaze) { delete currentMaze; }
-    if (mazeformouse) { delete mazeformouse; }
-    if (theMouse) { delete theMouse; }
-
     // change grid
     gridInput& currentGrid = grids.at(index);
 
@@ -75,8 +70,8 @@ void mazewalk::setupNextMaze(int index) {
     auto cheesePosition = randomEmptyLocation(currentGrid);
 
     // Initialize all the things
-    currentMaze = new mazeFull(currentGrid.width, currentGrid.height, currentGrid.grid, cheesePosition);
-    mazeformouse = new mazeForMouse(*currentMaze, origin, max(currentGrid.width, currentGrid.height));
-    theMouse = new mouse(*mazeformouse);
+    currentMaze.reset(new mazeFull(currentGrid.width, currentGrid.height, currentGrid.grid, cheesePosition));
+    mazeformouse.reset(new mazeForMouse(*currentMaze, origin, max(currentGrid.width, currentGrid.height)));
+    theMouse.reset(new mouse(*mazeformouse));
     previousPos = origin;
 }
