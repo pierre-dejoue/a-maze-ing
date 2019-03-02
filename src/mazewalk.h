@@ -1,17 +1,19 @@
-/* Copyright (c) 2018, Pierre DEJOUE
+/* Copyright (c) 2018 Pierre DEJOUE
  *
  * This software may be modified and distributed under the terms of the MIT license.
  * See the LICENSE file for details.
  */
-#ifndef _MAZEWALK_HPP_
-#define _MAZEWALK_HPP_
+#pragma once
+
 
 #include <memory>
 #include <vector>
 
-#include "input.hpp"
-#include "maze.hpp"
-#include "mouse.hpp"
+
+#include "input.h"
+#include "maze.h"
+#include "mouse.h"
+
 
 /*
  * Walk through solving multiple mazes, one mouse step at a time!
@@ -33,5 +35,3 @@ private:
 
     void setupNextMaze(int index);
 };
-
-#endif // _MAZEWALK_HPP_

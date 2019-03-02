@@ -1,15 +1,18 @@
-/* Copyright (c) 2018, Pierre DEJOUE
+/* Copyright (c) 2018 Pierre DEJOUE
  *
  * This software may be modified and distributed under the terms of the MIT license.
  * See the LICENSE file for details.
  */
-#ifndef _MOUSE_HPP_
-#define _MOUSE_HPP_
+#pragma once
 
-#include "maze.hpp"
+
 #include <memory>
 #include <stack>
 #include <vector>
+
+
+#include "maze.h"
+
 
 class step {
 public:
@@ -41,5 +44,3 @@ private:
     void markWall(coord pos, direction dir);
     bool isExplored(coord pos, direction dir);
 };
-
-#endif // _MOUSE_HPP_

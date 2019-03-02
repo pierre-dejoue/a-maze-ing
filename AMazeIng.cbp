@@ -45,22 +45,22 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="D:/SFML-2.4.2/include" />
+			<Add directory="C:/SFML-2.4.2/include" />
 		</Compiler>
 		<Linker>
-			<Add directory="D:/SFML-2.4.2/lib" />
+			<Add directory="C:/SFML-2.4.2/lib" />
 		</Linker>
-		<Unit filename="graphics.cpp" />
-		<Unit filename="graphics.hpp" />
-		<Unit filename="input.cpp" />
-		<Unit filename="input.hpp" />
-		<Unit filename="main.cpp" />
-		<Unit filename="maze.cpp" />
-		<Unit filename="maze.hpp" />
-		<Unit filename="mazewalk.cpp" />
-		<Unit filename="mazewalk.hpp" />
-		<Unit filename="mouse.cpp" />
-		<Unit filename="mouse.hpp" />
+		<Unit filename="src/graphics.cpp" />
+		<Unit filename="src/graphics.h" />
+		<Unit filename="src/input.cpp" />
+		<Unit filename="src/input.h" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/maze.cpp" />
+		<Unit filename="src/maze.h" />
+		<Unit filename="src/mazewalk.cpp" />
+		<Unit filename="src/mazewalk.h" />
+		<Unit filename="src/mouse.cpp" />
+		<Unit filename="src/mouse.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -1,13 +1,14 @@
-/* Copyright (c) 2018, Pierre DEJOUE
+/* Copyright (c) 2018 Pierre DEJOUE
  *
  * This software may be modified and distributed under the terms of the MIT license.
  * See the LICENSE file for details.
  */
-#ifndef _MAZE_HPP_
-#define _MAZE_HPP_
+#pragma once
+
 
 #include <iostream>
 #include <vector>
+
 
 enum direction {
     UP,
@@ -16,7 +17,9 @@ enum direction {
     RIGHT,
 };
 
+
 direction oppositeDirection(direction dir);
+
 
 class coord {
 public:
@@ -32,8 +35,10 @@ public:
     static const coord zero;
 };
 
+
 inline bool operator== (const coord& one, const coord& two) { return one.x == two.x && one.y == two.y; }
 inline bool operator!= (const coord& one, const coord& two) { return one.x != two.x || one.y != two.y; }
+
 
 enum mazeStatus {
     UNKNOWN = 0,
@@ -43,6 +48,7 @@ enum mazeStatus {
     PATH,
     CHEESE,
 };
+
 
 class mazeFull {
 public:
@@ -60,6 +66,7 @@ private:
     std::vector<mazeStatus> grid;
 };
 
+
 class mazeForMouse {
 public:
     mazeForMouse(const mazeFull& maze, const coord& initial, int max_dim);
@@ -73,8 +80,3 @@ private:
 public:
     int max_dim;
 };
-
-
-#endif // _MAZE_HPP_
-
-

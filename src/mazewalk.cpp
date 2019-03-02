@@ -1,14 +1,14 @@
-/* Copyright (c) 2018, Pierre DEJOUE
+/* Copyright (c) 2018 Pierre DEJOUE
  *
  * This software may be modified and distributed under the terms of the MIT license.
  * See the LICENSE file for details.
  */
-#include "mazewalk.hpp"
+#include "mazewalk.h"
+
 
 #include <algorithm>
 #include <cstdlib>
-
-using namespace std;
+#include <stdexcept>
 
 
 coord randomEmptyLocation(const gridInput& grid) {
@@ -25,11 +25,13 @@ coord randomEmptyLocation(const gridInput& grid) {
     return result;
 }
 
-mazewalk::mazewalk(vector<gridInput>& grids) : grids(grids) {
-    if (grids.empty()) { throw invalid_argument("Empty maze list!"); }
+
+mazewalk::mazewalk(std::vector<gridInput>& grids) : grids(grids) {
+    if (grids.empty()) { throw std::invalid_argument("Empty maze list!"); }
     index = 0;
     setupNextMaze(index);
 }
+
 
 mazeFull& mazewalk::nextMouseStep() {
     coord relativePos;
@@ -61,6 +63,7 @@ mazeFull& mazewalk::nextMouseStep() {
     return *currentMaze;
 }
 
+
 void mazewalk::setupNextMaze(int index) {
     // change grid
     gridInput& currentGrid = grids.at(index);
@@ -71,7 +74,7 @@ void mazewalk::setupNextMaze(int index) {
 
     // Initialize all the things
     currentMaze.reset(new mazeFull(currentGrid.width, currentGrid.height, currentGrid.grid, cheesePosition));
-    mazeformouse.reset(new mazeForMouse(*currentMaze, origin, max(currentGrid.width, currentGrid.height)));
+    mazeformouse.reset(new mazeForMouse(*currentMaze, origin, std::max(currentGrid.width, currentGrid.height)));
     theMouse.reset(new mouse(*mazeformouse));
     previousPos = origin;
 }

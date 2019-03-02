@@ -1,18 +1,24 @@
-/* Copyright (c) 2018, Pierre DEJOUE
+/* Copyright (c) 2018 Pierre DEJOUE
  *
  * This software may be modified and distributed under the terms of the MIT license.
  * See the LICENSE file for details.
  */
-#include "maze.hpp"
-#include "mouse.hpp"
+#include "mouse.h"
+
+
 #include <stack>
+#include <stdexcept>
 #include <vector>
 
-using namespace std;
 
-const vector<direction> step::allfour{ UP, LEFT, DOWN, RIGHT };
+#include "maze.h"
+
+
+const std::vector<direction> step::allfour{ UP, LEFT, DOWN, RIGHT };
+
 
 step::step() : from(LEFT), lefttoexplore(allfour) {};
+
 
 step::step(direction next) : from(oppositeDirection(next)) {
     for(auto dir : allfour) {
@@ -24,6 +30,7 @@ step::step(direction next) : from(oppositeDirection(next)) {
     lefttoexplore.push_back(next);
 }
 
+
 bool step::tryDirection(direction & outdir) {
     if(lefttoexplore.empty()) {
         return false;
@@ -34,25 +41,31 @@ bool step::tryDirection(direction & outdir) {
    }
 }
 
+
 mouse::mouse(mazeForMouse& maze) : maze(maze), relativePos(coord::zero), width(2*maze.max_dim + 1) {
     path.push(step());
     explored.resize(width * width, UNKNOWN);
 }
 
+
 // with width = 2* max_dim + 1
 int mouse::to1D(const coord& pos) { return (pos.y + maze.max_dim) * width + (pos.x + maze.max_dim); }
+
 
 void mouse::mark(const coord& pos, mazeStatus status) {
     explored[to1D(pos)] = status;
 }
 
+
 void mouse::markWall(coord pos, direction dir) {
     mark(pos.move(dir), WALL);
 }
 
+
 bool mouse::isExplored(coord pos, direction dir) {
     return explored[to1D(pos.move(dir))] != UNKNOWN;
 }
+
 
 bool mouse::nextStep(coord& outPos) {
     mark(relativePos);  // Mark current position as explored
@@ -76,7 +89,7 @@ bool mouse::nextStep(coord& outPos) {
             auto from = path.top().from;
             path.pop();
             if (!path.empty()) {
-                if (!maze.tryMove(from)) { throw logic_error("Impossible"); }
+                if (!maze.tryMove(from)) { throw std::logic_error("Impossible"); }
                 relativePos.move(from);
             }
 

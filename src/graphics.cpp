@@ -1,12 +1,16 @@
-/* Copyright (c) 2018, Pierre DEJOUE
+/* Copyright (c) 2018 Pierre DEJOUE
  *
  * This software may be modified and distributed under the terms of the MIT license.
  * See the LICENSE file for details.
  */
-#include "graphics.hpp"
-#include "maze.hpp"
+#include "graphics.h"
+
+
+#include "maze.h"
+
 
 using namespace sf;
+
 
 const Color unknownTile{0, 0, 0};
 const Color emptyTile{250, 250, 250};
@@ -14,6 +18,7 @@ const Color wallTile{105, 105, 105};
 const Color cheeseTile{255, 216, 0};
 const Color exploredTile{160, 160, 240};
 const Color pathTile{0, 0, 160};
+
 
 void draw(const mazeFull& mazeFull, RenderWindow& window, float scale) {
     auto width = window.getSize().x;

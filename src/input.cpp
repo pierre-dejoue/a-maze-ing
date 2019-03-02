@@ -1,14 +1,15 @@
-/* Copyright (c) 2018, Pierre DEJOUE
+/* Copyright (c) 2018 Pierre DEJOUE
  *
  * This software may be modified and distributed under the terms of the MIT license.
  * See the LICENSE file for details.
  */
- #include "input.hpp"
+#include "input.h"
+
 
 #include <fstream>
+#include <iostream>
 #include <string>
 
-using namespace std;
 
 gridInput::gridInput(std::string name, int width, int height) : name(name), width(width), height(height) {
     grid.resize(width * height, EMPTY);
@@ -22,12 +23,14 @@ enum ParsingState {
     ROWS,
 };
 
+
 const int INPUT_BUFFER_SZ = 2048;
+
 
 class lineParser {
 public:
     ParsingState state;
-    vector<gridInput> grids;
+    std::vector<gridInput> grids;
 
     lineParser() : state(FILE_START), name(""), width(0), height(0), rowCounter(0) {}
 
@@ -42,9 +45,9 @@ public:
      *      ...
      *                          <--- tail blank rows are optional
      */
-    bool parseInputLine(const string& line_to_parse) {
+    bool parseInputLine(const std::string& line_to_parse) {
         bool valid_line = false;
-        string token = line_to_parse.substr(0,4);
+        std::string token = line_to_parse.substr(0,4);
 
         // Only one token, 'GRID', which has the effect of resetting the state machine
         if(token == "GRID") {
@@ -56,6 +59,7 @@ public:
             switch (state) {
                 case FILE_START:
                 case GRID_START:
+                    valid_line = true;
                     break;
 
                 case WIDTH:
@@ -93,18 +97,19 @@ public:
     }
 
 private:
-    string name;
+    std::string name;
     int width;
     int height;
     int rowCounter;
 
 };
 
-void parseMazeInputFile(string filename, vector<gridInput>& outgrids) {
-    ifstream inputstream;
+
+void parseMazeInputFile(std::string filename, std::vector<gridInput>& outgrids) {
+    std::ifstream inputstream;
     inputstream.open(filename);
     if(!inputstream.is_open()) {
-        cerr << "Cannot open file " << filename << endl;
+        std::cerr << "Cannot open file " << filename << std::endl;
         exit(1);
     }
 
@@ -116,12 +121,12 @@ void parseMazeInputFile(string filename, vector<gridInput>& outgrids) {
     while(inputstream.good()) {
         line_nb++;
         inputstream.getline(line, INPUT_BUFFER_SZ - 1);
-        if((is_line_ok = parser.parseInputLine(string(line))) == false) {
-            cerr << "Parsing error on line " << line_nb << " (parsing_state = " << parser.state << "): " << line << endl;
+        if((is_line_ok = parser.parseInputLine(std::string(line))) == false) {
+            std::cerr << "Parsing error on line " << line_nb << " (parsing_state = " << parser.state << "): " << line << std::endl;
         }
     }
 
-    cout << "parsed " << line_nb << " lines." << endl;
+    std::cout << "parsed " << line_nb << " lines." << std::endl;
 
     // Close file. TODO: use RAII to mimic a try/finally block
     inputstream.close();
