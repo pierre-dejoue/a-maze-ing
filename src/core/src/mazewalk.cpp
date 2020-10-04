@@ -11,9 +11,9 @@
 #include <stdexcept>
 
 
-coord randomEmptyLocation(const gridInput& grid) {
+Coord randomEmptyLocation(const GridInput& grid) {
     bool found = false;
-    coord result;
+    Coord result;
     while (!found) {
         int x = rand() % grid.width;
         int y = rand() % grid.height;
@@ -26,16 +26,16 @@ coord randomEmptyLocation(const gridInput& grid) {
 }
 
 
-mazewalk::mazewalk(std::vector<gridInput>& grids) : grids(grids) {
+Mazewalk::Mazewalk(std::vector<GridInput>& grids) : grids(grids) {
     if (grids.empty()) { throw std::invalid_argument("Empty maze list!"); }
     index = 0;
     setupNextMaze(index);
 }
 
 
-mazeFull& mazewalk::nextMouseStep() {
-    coord relativePos;
-    coord currentPos;
+MazeFull& Mazewalk::nextMouseStep() {
+    Coord relativePos;
+    Coord currentPos;
     bool foundCheese;
 
     do {
@@ -64,17 +64,17 @@ mazeFull& mazewalk::nextMouseStep() {
 }
 
 
-void mazewalk::setupNextMaze(int index) {
+void Mazewalk::setupNextMaze(int index) {
     // change grid
-    gridInput& currentGrid = grids.at(index);
+    GridInput& currentGrid = grids.at(index);
 
     // random cheese and mouse positions
     origin = randomEmptyLocation(currentGrid);
     auto cheesePosition = randomEmptyLocation(currentGrid);
 
     // Initialize all the things
-    currentMaze.reset(new mazeFull(currentGrid.width, currentGrid.height, currentGrid.grid, cheesePosition));
-    mazeformouse.reset(new mazeForMouse(*currentMaze, origin, std::max(currentGrid.width, currentGrid.height)));
-    theMouse.reset(new mouse(*mazeformouse));
+    currentMaze.reset(new MazeFull(currentGrid.width, currentGrid.height, currentGrid.grid, cheesePosition));
+    mazeformouse.reset(new MazeForMouse(*currentMaze, origin, std::max(currentGrid.width, currentGrid.height)));
+    theMouse.reset(new Mouse(*mazeformouse));
     previousPos = origin;
 }

@@ -5,12 +5,11 @@
  */
 #pragma once
 
-
-#include <iostream>
+#include <string>
 #include <vector>
 
 
-enum direction {
+enum Direction {
     UP,
     LEFT,
     DOWN,
@@ -18,29 +17,29 @@ enum direction {
 };
 
 
-direction oppositeDirection(direction dir);
+Direction oppositeDirection(Direction dir);
 
 
-class coord {
+class Coord {
 public:
     int x;
     int y;
-    coord() : x(0), y(0) {};
-    coord(int x, int y) : x(x), y(y) {};
-    coord(const coord& coord) = default;
-    coord& operator= (const coord& other) = default;
-    coord& move(direction dir);
-    coord offset(const coord& off);
+    Coord() : x(0), y(0) {};
+    Coord(int x, int y) : x(x), y(y) {};
+    Coord(const Coord& coord) = default;
+    Coord& operator= (const Coord& other) = default;
+    Coord& move(Direction dir);
+    Coord offset(const Coord& off);
     std::string str() const;
-    static const coord zero;
+    static const Coord zero;
 };
 
 
-inline bool operator== (const coord& one, const coord& two) { return one.x == two.x && one.y == two.y; }
-inline bool operator!= (const coord& one, const coord& two) { return one.x != two.x || one.y != two.y; }
+inline bool operator== (const Coord& one, const Coord& two) { return one.x == two.x && one.y == two.y; }
+inline bool operator!= (const Coord& one, const Coord& two) { return one.x != two.x || one.y != two.y; }
 
 
-enum mazeStatus {
+enum MazeStatus {
     UNKNOWN = 0,
     EMPTY,
     WALL,
@@ -50,32 +49,33 @@ enum mazeStatus {
 };
 
 
-class mazeFull {
+class MazeFull {
+public:
+    MazeFull(int width, int height);
+    MazeFull(int width, int height, int* mapping);
+    MazeFull(int width, int height, const std::vector<MazeStatus>& grid, Coord cheese);
+    MazeStatus getStatus(const Coord& coord) const;
+    void setStatus(const Coord& coord, MazeStatus status);
+    bool boundCheck(Coord pos) const;
+
 public:
     const int width;
     const int height;
 
-    mazeFull(int width, int height);
-    mazeFull(int width, int height, int* mapping);
-    mazeFull(int width, int height, const std::vector<mazeStatus>& grid, coord cheese);
-    mazeStatus getStatus(const coord& coord) const;
-    void setStatus(const coord& coord, mazeStatus status);
-    bool boundCheck(coord pos) const;
-
 private:
-    std::vector<mazeStatus> grid;
+    std::vector<MazeStatus> grid;
 };
 
 
-class mazeForMouse {
+class MazeForMouse {
 public:
-    mazeForMouse(const mazeFull& maze, const coord& initial, int max_dim);
-    bool tryMove(direction dir);
+    MazeForMouse(const MazeFull& maze, const Coord& initial, int max_dim);
+    bool tryMove(Direction dir);
     bool foundCheese() const;
 
 private:
-    const mazeFull& maze;
-    coord pos;
+    const MazeFull& maze;
+    Coord pos;
 
 public:
     int max_dim;

@@ -5,24 +5,20 @@
  */
 #pragma once
 
+#include "maze.h"
 
-#include <cstdlib>
 #include <string>
 #include <vector>
 
 
-#include "maze.h"
+struct GridInput {
+    GridInput(std::string name, int width, int height);
 
-
-class gridInput {
-public:
-    gridInput(std::string name, int width, int height);
-public:
     std::string name;
     int width;
     int height;
-    std::vector<mazeStatus> grid;
+    std::vector<MazeStatus> grid;
 };
 
 
-void parseMazeInputFile(std::string filename, std::vector<gridInput>& outgrids);
+void parseMazeInputFile(std::string filename, std::vector<GridInput>& outgrids);

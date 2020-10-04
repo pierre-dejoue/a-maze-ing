@@ -5,13 +5,14 @@
  */
 #include "input.h"
 
-
+#include <cassert>
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
 
-gridInput::gridInput(std::string name, int width, int height) : name(name), width(width), height(height) {
+GridInput::GridInput(std::string name, int width, int height) : name(name), width(width), height(height) {
     grid.resize(width * height, EMPTY);
 }
 
@@ -30,7 +31,7 @@ const int INPUT_BUFFER_SZ = 2048;
 class lineParser {
 public:
     ParsingState state;
-    std::vector<gridInput> grids;
+    std::vector<GridInput> grids;
 
     lineParser() : state(FILE_START), name(""), width(0), height(0), rowCounter(0) {}
 
@@ -70,12 +71,13 @@ public:
 
                 case HEIGHT:
                     height = stoi(line_to_parse);
-                    grids.push_back(gridInput(name, width, height));
+                    grids.push_back(GridInput(name, width, height));
                     state = ROWS;
                     valid_line = true;
                     break;
 
                 case ROWS:
+                {
                     int y = 0;
                     for (auto c : line_to_parse) {
                         if (c == '#') {
@@ -90,6 +92,10 @@ public:
                     }
                     valid_line = true;
                     break;
+                }
+
+                default:
+                    assert(0);
             }
         }
 
@@ -105,7 +111,7 @@ private:
 };
 
 
-void parseMazeInputFile(std::string filename, std::vector<gridInput>& outgrids) {
+void parseMazeInputFile(std::string filename, std::vector<GridInput>& outgrids) {
     std::ifstream inputstream;
     inputstream.open(filename);
     if(!inputstream.is_open()) {

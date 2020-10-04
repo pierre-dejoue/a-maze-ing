@@ -5,31 +5,29 @@
  */
 #include "graphics.h"
 
-
 #include "maze.h"
 
-
-using namespace sf;
-
-
-const Color unknownTile{0, 0, 0};
-const Color emptyTile{250, 250, 250};
-const Color wallTile{105, 105, 105};
-const Color cheeseTile{255, 216, 0};
-const Color exploredTile{160, 160, 240};
-const Color pathTile{0, 0, 160};
+#include <cassert>
 
 
-void draw(const mazeFull& mazeFull, RenderWindow& window, float scale) {
+const sf::Color unknownTile{0, 0, 0};
+const sf::Color emptyTile{250, 250, 250};
+const sf::Color wallTile{105, 105, 105};
+const sf::Color cheeseTile{255, 216, 0};
+const sf::Color exploredTile{160, 160, 240};
+const sf::Color pathTile{0, 0, 160};
+
+
+void draw(const MazeFull& mazeFull, sf::RenderWindow& window, float scale) {
     auto width = window.getSize().x;
     auto height = window.getSize().y;
-    Vector2f origin{width / 2 - mazeFull.width / 2 * scale, height / 2 - mazeFull.height / 2 * scale};
+    sf::Vector2f origin{width / 2 - mazeFull.width / 2 * scale, height / 2 - mazeFull.height / 2 * scale};
 
     for (int y = 0; y < mazeFull.height; y++) {
         for (int x = 0; x < mazeFull.width; x++) {
-           RectangleShape rectangle({scale, scale});
+           sf::RectangleShape rectangle({scale, scale});
            rectangle.setPosition({origin.x + scale * x, origin.y + scale * y});
-           switch(mazeFull.getStatus(coord{x, y})) {
+           switch (mazeFull.getStatus(Coord{ x, y })) {
                case UNKNOWN:
                    rectangle.setFillColor(unknownTile);
                    break;
@@ -48,9 +46,10 @@ void draw(const mazeFull& mazeFull, RenderWindow& window, float scale) {
                case PATH:
                    rectangle.setFillColor(pathTile);
                    break;
+               default:
+                   assert(0);
            }
            window.draw(rectangle);
         }
     }
 }
-

@@ -5,11 +5,8 @@
  */
 #pragma once
 
-
 #include <SFML/Graphics.hpp>
 
+class MazeFull;
 
-#include "maze.h"
-
-
-void draw(const mazeFull& mazeFull, sf::RenderWindow& window, float scale = 1.0);
+void draw(const MazeFull& mazeFull, sf::RenderWindow& window, float scale = 1.0);

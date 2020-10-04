@@ -5,42 +5,39 @@
  */
 #pragma once
 
+#include "maze.h"
 
-#include <memory>
 #include <stack>
 #include <vector>
 
 
-#include "maze.h"
-
-
-class step {
+class MouseStep {
 public:
-    direction from;
-    step();
-    step(direction next);
-    bool tryDirection(direction & outdir);
+    Direction from;
+    MouseStep();
+    MouseStep(Direction next);
+    bool tryDirection(Direction & outdir);
 
 private:
-    std::vector<direction> lefttoexplore;
-    static const std::vector<direction> allfour;
+    std::vector<Direction> lefttoexplore;
+    static const std::vector<Direction> allfour;
 };
 
 
-class mouse {
+class Mouse {
 public:
-    mouse(mazeForMouse& maze);
-    bool nextStep(coord &pos);
+    Mouse(MazeForMouse& maze);
+    bool nextStep(Coord &pos);
 
 private:
-    mazeForMouse& maze;
-    coord relativePos;
-    std::stack<step> path;
-    std::vector<mazeStatus> explored;
+    MazeForMouse& maze;
+    Coord relativePos;
+    std::stack<MouseStep> path;
+    std::vector<MazeStatus> explored;
     int width;
 
-    int to1D(const coord& pos);
-    void mark(const coord& pos, mazeStatus status = EXPLORED);
-    void markWall(coord pos, direction dir);
-    bool isExplored(coord pos, direction dir);
+    int to1D(const Coord& pos);
+    void mark(const Coord& pos, MazeStatus status = EXPLORED);
+    void markWall(Coord pos, Direction dir);
+    bool isExplored(Coord pos, Direction dir);
 };

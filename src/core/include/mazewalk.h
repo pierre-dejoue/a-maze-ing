@@ -5,33 +5,31 @@
  */
 #pragma once
 
+#include "input.h"
+#include "maze.h"
+#include "mouse.h"
 
 #include <memory>
 #include <vector>
 
 
-#include "input.h"
-#include "maze.h"
-#include "mouse.h"
-
-
 /*
  * Walk through solving multiple mazes, one mouse step at a time!
  */
-class mazewalk {
+class Mazewalk {
 public:
-    mazewalk(std::vector<gridInput>& grids);
+    Mazewalk(std::vector<GridInput>& grids);
 
-    mazeFull& nextMouseStep();
+    MazeFull& nextMouseStep();
 
 private:
-    std::vector<gridInput>& grids;
+    std::vector<GridInput>& grids;
     unsigned int index;
-    std::unique_ptr<mazeFull> currentMaze;
-    std::unique_ptr<mazeForMouse> mazeformouse;
-    std::unique_ptr<mouse> theMouse;
-    coord previousPos;
-    coord origin;           // Starting position in the maze
+    std::unique_ptr<MazeFull> currentMaze;
+    std::unique_ptr<MazeForMouse> mazeformouse;
+    std::unique_ptr<Mouse> theMouse;
+    Coord previousPos;
+    Coord origin;           // Starting position in the maze
 
     void setupNextMaze(int index);
 };

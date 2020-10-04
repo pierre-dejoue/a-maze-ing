@@ -5,22 +5,20 @@
  */
 #include "mouse.h"
 
+#include "maze.h"
 
 #include <stack>
 #include <stdexcept>
 #include <vector>
 
 
-#include "maze.h"
+const std::vector<Direction> MouseStep::allfour{ UP, LEFT, DOWN, RIGHT };
 
 
-const std::vector<direction> step::allfour{ UP, LEFT, DOWN, RIGHT };
+MouseStep::MouseStep() : from(LEFT), lefttoexplore(allfour) {};
 
 
-step::step() : from(LEFT), lefttoexplore(allfour) {};
-
-
-step::step(direction next) : from(oppositeDirection(next)) {
+MouseStep::MouseStep(Direction next) : from(oppositeDirection(next)) {
     for(auto dir : allfour) {
         if (dir != from && dir != next) {
             lefttoexplore.push_back(dir);
@@ -31,7 +29,7 @@ step::step(direction next) : from(oppositeDirection(next)) {
 }
 
 
-bool step::tryDirection(direction & outdir) {
+bool MouseStep::tryDirection(Direction & outdir) {
     if(lefttoexplore.empty()) {
         return false;
     } else {
@@ -42,44 +40,44 @@ bool step::tryDirection(direction & outdir) {
 }
 
 
-mouse::mouse(mazeForMouse& maze) : maze(maze), relativePos(coord::zero), width(2*maze.max_dim + 1) {
-    path.push(step());
+Mouse::Mouse(MazeForMouse& maze) : maze(maze), relativePos(Coord::zero), width(2*maze.max_dim + 1) {
+    path.push(MouseStep());
     explored.resize(width * width, UNKNOWN);
 }
 
 
 // with width = 2* max_dim + 1
-int mouse::to1D(const coord& pos) { return (pos.y + maze.max_dim) * width + (pos.x + maze.max_dim); }
+int Mouse::to1D(const Coord& pos) { return (pos.y + maze.max_dim) * width + (pos.x + maze.max_dim); }
 
 
-void mouse::mark(const coord& pos, mazeStatus status) {
+void Mouse::mark(const Coord& pos, MazeStatus status) {
     explored[to1D(pos)] = status;
 }
 
 
-void mouse::markWall(coord pos, direction dir) {
+void Mouse::markWall(Coord pos, Direction dir) {
     mark(pos.move(dir), WALL);
 }
 
 
-bool mouse::isExplored(coord pos, direction dir) {
+bool Mouse::isExplored(Coord pos, Direction dir) {
     return explored[to1D(pos.move(dir))] != UNKNOWN;
 }
 
 
-bool mouse::nextStep(coord& outPos) {
+bool Mouse::nextStep(Coord& outPos) {
     mark(relativePos);  // Mark current position as explored
     if (maze.foundCheese()) {
         outPos = relativePos;
         return true;
     } else if(!path.empty()) {
-        direction next;
+        Direction next;
         if(path.top().tryDirection(next)) {
             // Attempt to move in direction 'next'
             if (!isExplored(relativePos, next)) {
                 if (maze.tryMove(next)) {
                     relativePos.move(next);
-                    path.push(step(next));
+                    path.push(MouseStep(next));
                 } else {
                     markWall(relativePos, next);
                 }

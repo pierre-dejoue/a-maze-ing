@@ -3,25 +3,18 @@
  * This software may be modified and distributed under the terms of the MIT license.
  * See the LICENSE file for details.
  */
-#include <algorithm>
-#include <chrono>
-#include <iostream>
-#include <stdlib.h>
-#include <thread>
-
 
 #include "graphics.h"
 #include "input.h"
 #include "maze.h"
 #include "mazewalk.h"
 
+#include <exception>
+#include <iostream>
+#include <vector>
 
-const unsigned winWidth{800};
-const unsigned winHeight{800};
-
-
-using namespace sf;
-
+constexpr unsigned int winWidth = 800;
+constexpr unsigned int winHeight = 800;
 
 int main(int argc, char *argv[])
 {
@@ -44,24 +37,24 @@ int main(int argc, char *argv[])
         /*
          * Parse input file
          */
-        std::vector<gridInput> grids;
+        std::vector<GridInput> grids;
         parseMazeInputFile(filename, grids);
-        auto walker = mazewalk(grids);
+        auto walker = Mazewalk(grids);
 
         /*
          * Display maze
          */
         unsigned width = winWidth;
         unsigned height = winHeight;
-        RenderWindow window({ width, height }, "a-maze-ing!");
+        sf::RenderWindow window({ width, height }, "a-maze-ing!");
         window.setFramerateLimit(60);
 
         while (window.isOpen())
         {
-            Event event;
+            sf::Event event;
             while (window.pollEvent(event))
             {
-                if (event.type == Event::Closed)
+                if (event.type == sf::Event::Closed)
                     window.close();
             }
             window.clear();
