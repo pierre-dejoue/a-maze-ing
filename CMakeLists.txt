@@ -10,21 +10,21 @@ project(a-maze-ing)
 
 
 set(SOURCES
-    src/graphics.cpp
-    src/input.cpp
+    src/core/src/input.cpp
+    src/core/src/maze.cpp
+    src/core/src/mazewalk.cpp
+    src/core/src/mouse.cpp
+    src/graphics/src/graphics.cpp
     src/main.cpp
-    src/maze.cpp
-    src/mazewalk.cpp
-    src/mouse.cpp
 )
 
 
 set(HEADERS
-    src/graphics.h
-    src/input.h
-    src/maze.h
-    src/mazewalk.h
-    src/mouse.h
+    src/core/include/input.h
+    src/core/include/maze.h
+    src/core/include/mazewalk.h
+    src/core/include/mouse.h
+    src/graphics/include/graphics.h
 )
 
 
@@ -39,5 +39,5 @@ include_directories(${SFML_INCLUDE_DIR})
 
 
 add_executable(a-maze-ing ${SOURCES} ${HEADERS})
-target_include_directories(a-maze-ing PRIVATE src/)
+target_include_directories(a-maze-ing PRIVATE src/core/include src/graphics/include)
 target_link_libraries(a-maze-ing sfml-graphics)
