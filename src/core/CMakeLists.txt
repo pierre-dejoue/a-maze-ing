@@ -12,5 +12,5 @@ set(HEADERS
     include/mouse.h
 )
 
-add_library(core ${SOURCES} ${HEADERS})
+add_library(core STATIC ${SOURCES} ${HEADERS})
 target_include_directories(core PUBLIC include)
