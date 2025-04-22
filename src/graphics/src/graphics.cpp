@@ -18,16 +18,20 @@ const sf::Color exploredTile{160, 160, 240};
 const sf::Color pathTile{0, 0, 160};
 
 
-void draw(const MazeFull& mazeFull, sf::RenderWindow& window, float scale) {
+void draw(const MazeFull& mazeFull, sf::RenderWindow& window, float scale)
+{
     auto width = window.getSize().x;
     auto height = window.getSize().y;
-    sf::Vector2f origin{width / 2 - mazeFull.width / 2 * scale, height / 2 - mazeFull.height / 2 * scale};
+    const sf::Vector2f origin{width / 2 - mazeFull.width / 2 * scale, height / 2 - mazeFull.height / 2 * scale};
 
-    for (int y = 0; y < mazeFull.height; y++) {
-        for (int x = 0; x < mazeFull.width; x++) {
+    for (int y = 0; y < mazeFull.height; y++)
+    {
+        for (int x = 0; x < mazeFull.width; x++)
+        {
            sf::RectangleShape rectangle({scale, scale});
            rectangle.setPosition({origin.x + scale * x, origin.y + scale * y});
-           switch (mazeFull.getStatus(Coord{ x, y })) {
+           switch (mazeFull.getStatus(Coord{ x, y }))
+           {
                case UNKNOWN:
                    rectangle.setFillColor(unknownTile);
                    break;

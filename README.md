@@ -14,7 +14,7 @@ Run with an example file:
 
 ## Dependencies
 
-Graphics library: [SFML](https://github.com/SFML/SFML) >= 2.5.
+Graphics library: [SFML](https://github.com/SFML/SFML) >= 3.0
 
 ## Build with CMake
 
@@ -23,7 +23,7 @@ For example on Windows:
 ```
 $ mkdir build
 $ cd build
-$ cmake -G "Visual Studio 17 2022" ..
+$ cmake -G "Visual Studio 17 2022" -DBUILD_SHARED_LIBS=FALSE ..
 $ cmake --build . --config Debug
 ```
 

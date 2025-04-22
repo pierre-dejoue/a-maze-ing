@@ -11,8 +11,9 @@
 #include <vector>
 
 
-struct GridInput {
-    GridInput(std::string name, int width, int height);
+struct GridInput
+{
+    GridInput(const std::string& name, int width, int height);
 
     std::string name;
     int width;
@@ -21,4 +22,4 @@ struct GridInput {
 };
 
 
-void parseMazeInputFile(std::string filename, std::vector<GridInput>& outgrids);
+int parseMazeInputFile(const std::string& filename, std::vector<GridInput>& outgrids);

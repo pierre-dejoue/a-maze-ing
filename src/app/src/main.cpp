@@ -9,61 +9,66 @@
 #include "maze.h"
 #include "mazewalk.h"
 
+#include <cassert>
 #include <exception>
 #include <iostream>
+#include <optional>
 #include <vector>
 
-constexpr unsigned int winWidth = 800;
-constexpr unsigned int winHeight = 800;
+constexpr unsigned int WIN_W = 800;
+constexpr unsigned int WIN_H = 800;
 
 int main(int argc, char *argv[])
 {
-    try {
+    try
+    {
         /*
          * Process command line
          */
-        char * filename;
-        if(argc == 2)
-        {
-            filename = argv[1];  // input filename
-        }
-        else
+        if (argc != 2)
         {
             std::cerr << "Usage:" << std::endl;
             std::cerr << "    amazing input_filename" << std::endl;
             exit(1);
         }
+        const char* input_filename = argv[1];
+        assert(input_filename != nullptr);
 
         /*
          * Parse input file
          */
         std::vector<GridInput> grids;
-        parseMazeInputFile(filename, grids);
+        {
+            const int err_code = parseMazeInputFile(input_filename, grids);
+            if (err_code != 0)
+            {
+                exit(err_code);
+            }
+        }
         auto walker = Mazewalk(grids);
 
         /*
          * Display maze
          */
-        unsigned width = winWidth;
-        unsigned height = winHeight;
-        sf::RenderWindow window({ width, height }, "a-maze-ing!");
+        sf::RenderWindow window(sf::VideoMode({ WIN_W, WIN_H }), "a-maze-ing!");
         window.setFramerateLimit(60);
 
         while (window.isOpen())
         {
-            sf::Event event;
-            while (window.pollEvent(event))
+            while (const std::optional<sf::Event> event = window.pollEvent())
             {
-                if (event.type == sf::Event::Closed)
-                    window.close();
+                if (event->is<sf::Event::Closed>()) { window.close(); }
             }
             window.clear();
-
-            draw(walker.nextMouseStep(), window, 20.0);
+            draw(walker.nextMouseStep(), window, 20.0f);
             window.display();
         }
-
-    } catch (std::exception& e) { std::cerr << "ERROR: " << e.what() << std::endl; exit(2); }
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << "ERROR: " << e.what() << std::endl;
+        exit(2);
+    }
 
     return 0;
 }

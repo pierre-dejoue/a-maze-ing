@@ -12,11 +12,16 @@
 #include <vector>
 
 
-GridInput::GridInput(std::string name, int width, int height) : name(name), width(width), height(height) {
+GridInput::GridInput(const std::string& name, int width, int height)
+    : name(name)
+    , width(width)
+    , height(height)
+{
     grid.resize(width * height, EMPTY);
 }
 
-enum ParsingState {
+enum ParsingState
+{
     FILE_START,
     GRID_START,
     WIDTH,
@@ -24,16 +29,19 @@ enum ParsingState {
     ROWS,
 };
 
-
-const int INPUT_BUFFER_SZ = 2048;
-
-
-class lineParser {
+class lineParser
+{
 public:
     ParsingState state;
     std::vector<GridInput> grids;
 
-    lineParser() : state(FILE_START), name(""), width(0), height(0), rowCounter(0) {}
+    lineParser()
+        : state(FILE_START)
+        , name()
+        , width(0)
+        , height(0)
+        , rowCounter(0)
+    { }
 
     /*
      * Parse one line from the input file, based on parsing_state
@@ -46,18 +54,23 @@ public:
      *      ...
      *                          <--- tail blank rows are optional
      */
-    bool parseInputLine(const std::string& line_to_parse) {
+    bool parseInputLine(const std::string& line_to_parse)
+    {
         bool valid_line = false;
         std::string token = line_to_parse.substr(0,4);
 
         // Only one token, 'GRID', which has the effect of resetting the state machine
-        if(token == "GRID") {
+        if(token == "GRID")
+        {
             state = WIDTH;
             rowCounter = 0;
             name = line_to_parse.substr(5);
             valid_line = true;
-        } else {
-            switch (state) {
+        }
+        else
+        {
+            switch (state)
+            {
                 case FILE_START:
                 case GRID_START:
                     valid_line = true;
@@ -96,6 +109,7 @@ public:
 
                 default:
                     assert(0);
+                    break;
             }
         }
 
@@ -107,35 +121,38 @@ private:
     int width;
     int height;
     int rowCounter;
-
 };
 
-
-void parseMazeInputFile(std::string filename, std::vector<GridInput>& outgrids) {
-    std::ifstream inputstream;
-    inputstream.open(filename);
-    if(!inputstream.is_open()) {
-        std::cerr << "Cannot open file " << filename << std::endl;
-        exit(1);
-    }
-
-    lineParser parser;
-
-    char line[INPUT_BUFFER_SZ];
-    int line_nb = 0;
-    bool is_line_ok;
-    while(inputstream.good()) {
-        line_nb++;
-        inputstream.getline(line, INPUT_BUFFER_SZ - 1);
-        if((is_line_ok = parser.parseInputLine(std::string(line))) == false) {
-            std::cerr << "Parsing error on line " << line_nb << " (parsing_state = " << parser.state << "): " << line << std::endl;
+int parseMazeInputFile(const std::string& filename, std::vector<GridInput>& outgrids)
+{
+    constexpr unsigned int INPUT_BUFFER_SZ = 2048u;
+    try
+    {
+        std::ifstream inputstream(filename, std::ios_base::in);
+        if(!inputstream.is_open()) {
+            std::cerr << "Cannot open file " << filename << std::endl;
+            return 4;
         }
+
+        lineParser parser;
+        char line[INPUT_BUFFER_SZ];
+        unsigned int line_nb = 0;
+        while(inputstream.good()) {
+            line_nb++;
+            inputstream.getline(line, INPUT_BUFFER_SZ - 1);
+            if (!parser.parseInputLine(std::string(line)))
+            {
+                std::cerr << "Parsing error on line " << line_nb << " (parsing_state = " << parser.state << "): " << line << std::endl;
+            }
+        }
+
+        std::cout << "Parsed " << line_nb << " lines and " << parser.grids.size() << " grids in file " << filename << std::endl;
+        outgrids = std::move(parser.grids);
     }
-
-    std::cout << "parsed " << line_nb << " lines." << std::endl;
-
-    // Close file. TODO: use RAII to mimic a try/finally block
-    inputstream.close();
-
-    outgrids = parser.grids;
+    catch(const std::exception& e)
+    {
+        std::cerr << "Error reading file " << filename << ": " << e.what() << std::endl;
+        return 5;
+    }
+    return 0;
 }

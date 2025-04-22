@@ -11,6 +11,4 @@ target_link_libraries(a-maze-ing
     graphics
 )
 
-copy_graphics_runtime(a-maze-ing)
-
 install(TARGETS a-maze-ing)
