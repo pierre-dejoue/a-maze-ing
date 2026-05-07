@@ -8,7 +8,9 @@
 #include "maze.h"
 
 #include <cassert>
+#include <string>
 
+namespace graphics {
 
 const sf::Color unknownTile{0, 0, 0};
 const sf::Color emptyTile{250, 250, 250};
@@ -16,7 +18,6 @@ const sf::Color wallTile{105, 105, 105};
 const sf::Color cheeseTile{255, 216, 0};
 const sf::Color exploredTile{160, 160, 240};
 const sf::Color pathTile{0, 0, 160};
-
 
 void draw(const MazeFull& mazeFull, sf::RenderWindow& window, float scale)
 {
@@ -57,3 +58,15 @@ void draw(const MazeFull& mazeFull, sf::RenderWindow& window, float scale)
         }
     }
 }
+
+std::string_view framework_name_and_version()
+{
+    static const std::string name_and_version = []() {
+            std::string ver = "SFML_";
+            ver += sf::version().string;
+            return ver;
+        }();
+    return name_and_version;
+}
+
+} // namespace graphics

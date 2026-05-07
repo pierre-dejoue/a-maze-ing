@@ -10,7 +10,7 @@ A mouse is looking for a piece of cheese.
 
 Run with an example file:
 
-`a-maze-ing misc/example-input/mazes.txt`
+`a-maze-ing ./misc/example-input/mazes.txt`
 
 ## Dependencies
 

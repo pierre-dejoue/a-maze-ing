@@ -7,6 +7,14 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <string_view>
+
 class MazeFull;
 
+namespace graphics {
+
 void draw(const MazeFull& mazeFull, sf::RenderWindow& window, float scale = 1.0);
+
+std::string_view framework_name_and_version();
+
+} // namespace graphics

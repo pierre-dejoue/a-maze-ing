@@ -17,6 +17,8 @@
 
 constexpr unsigned int WIN_W = 800;
 constexpr unsigned int WIN_H = 800;
+constexpr unsigned int FRAMERATE_LIMIT = 60;
+constexpr float ZOOM_SCALE = 20.0f;
 
 int main(int argc, char *argv[])
 {
@@ -28,11 +30,16 @@ int main(int argc, char *argv[])
         if (argc != 2)
         {
             std::cerr << "Usage:" << std::endl;
-            std::cerr << "    amazing input_filename" << std::endl;
+            std::cerr << "    a-maze-ing input_filename" << std::endl;
             exit(1);
         }
         const char* input_filename = argv[1];
         assert(input_filename != nullptr);
+
+        /*
+         * Report the graphics framework version
+         */
+        std::cout << "Using framework: " << graphics::framework_name_and_version() << std::endl;
 
         /*
          * Parse input file
@@ -51,7 +58,7 @@ int main(int argc, char *argv[])
          * Display maze
          */
         sf::RenderWindow window(sf::VideoMode({ WIN_W, WIN_H }), "a-maze-ing!");
-        window.setFramerateLimit(60);
+        window.setFramerateLimit(FRAMERATE_LIMIT);
 
         while (window.isOpen())
         {
@@ -60,7 +67,7 @@ int main(int argc, char *argv[])
                 if (event->is<sf::Event::Closed>()) { window.close(); }
             }
             window.clear();
-            draw(walker.nextMouseStep(), window, 20.0f);
+            graphics::draw(walker.nextMouseStep(), window, ZOOM_SCALE);
             window.display();
         }
     }
